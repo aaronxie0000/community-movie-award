@@ -1,10 +1,10 @@
 import React, {useState} from "react";
 import styled from "styled-components";
-import { Input } from "./common/Input.js";
+
+import Input  from "./common/Input.js";
 import ShortList from "./ShortList.js";
 import DisplayMovie from "./DisplayMovie.js";
 
-import { AiOutlineSearch } from "react-icons/ai";
 
 const GridCont = styled.div`
   display: grid;
@@ -32,21 +32,7 @@ const MyMovie = styled.div`
   grid-area: MyMovie;
 `;
 
-const InputBar = styled.div`
-  margin-top: 0.5rem;
-  border: 2px solid ${props=>props.theme.tchColor};
-  box-shadow: 2px 1.5px 5px rgba(0, 0, 0, 0.15);
-  display: flex;
-  align-items: center;
-  border-radius: 5px;
 
-  height: 3rem;
-
-  svg {
-    margin: 0 2px 0 6px;
-    font-size: 20px;
-  }
-`;
 
 const Title = styled.h1`
   text-align: center;
@@ -57,20 +43,18 @@ const Title = styled.h1`
 
 const DisplayMovieCont = styled.div`
   grid-area: DisplayMovie;
+  overflow: scroll;
 `;
 
 function AddMovie() {
-  const [movieTitle, setTitle] = useState();
+  const [movieTitle, setTitle] = useState('');
 
 
   return (
     <GridCont>
       <SearchMovie>
         <h1>Search a movie!</h1>
-        <InputBar>
-          <AiOutlineSearch></AiOutlineSearch>
-          <Input value={movieTitle} onChange={e=>setTitle(e.target.value)} placeholder="Movie Name" width="100%"></Input>
-        </InputBar>
+        <Input movieTitle={movieTitle} setTitle={setTitle}></Input>
       </SearchMovie>
 
       <DisplayMovieCont>

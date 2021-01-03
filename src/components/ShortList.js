@@ -6,11 +6,13 @@ import firebase from "../firebase.js";
 
 
 const List = styled.ul` 
-  list-style: none;
-  margin: 1rem 0 0 3rem;
+  list-style: decimal;
+  margin: 1rem 0 0 5rem;
 
   & li{
-    line-height: 2rem;
+    line-height: 2.2rem;
+    font-size: 1.2rem;
+    font-weight: 400;
   }
 
 `;
