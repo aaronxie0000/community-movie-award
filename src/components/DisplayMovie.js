@@ -37,7 +37,7 @@ const Button= styled.button`
     }
 `;
 
-function DisplayMovie({ movieTitle }) {
+function DisplayMovie({ movieTitle, setMyNoms }) {
     const [showResult, updateShowResult] = useState(false);
     const [resMovie, setMovie] = useState([]);
 
@@ -65,14 +65,21 @@ function DisplayMovie({ movieTitle }) {
             });
     }, [movieTitle]);
 
+    function addMovie(e){
+        const temp = e.target.parentNode.textContent;
+        const targetMovie = temp.split("Nominate")[0];
+
+        setMyNoms(prev=> [...prev, targetMovie]);
+    }
+
     return (
         <List>
             {showResult ? (
-                resMovie.map((movie) => {
+                resMovie.map((movie, index) => {
                     return (
-                        <Item>
+                        <Item key={index}>
                             {movie.Title} ({movie.Year})
-                            <Button>Nominate</Button>
+                            <Button onClick={addMovie}>Nominate</Button>
                         </Item>
                     );
                 })

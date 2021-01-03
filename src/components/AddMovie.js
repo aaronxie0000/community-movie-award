@@ -11,7 +11,7 @@ const GridCont = styled.div`
 
   border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 5px;
-  padding: 2rem;
+  padding: 4rem 2rem;
 
   margin: 4rem 0 0 0;
   width: 80vw;
@@ -48,6 +48,7 @@ const DisplayMovieCont = styled.div`
 
 function AddMovie() {
   const [movieTitle, setTitle] = useState('');
+  const [myNoms, setMyNoms] = useState([]);
 
 
   return (
@@ -58,12 +59,12 @@ function AddMovie() {
       </SearchMovie>
 
       <DisplayMovieCont>
-        <DisplayMovie movieTitle={movieTitle} />
+        <DisplayMovie movieTitle={movieTitle} setMyNoms={setMyNoms}/>
       </DisplayMovieCont>
 
       <MyMovie>
-        <Title>Your Short List</Title>
-        <ShortList />
+        <Title>Your Nominations</Title>
+        <ShortList myNoms={myNoms} setMyNoms={setMyNoms} />
       </MyMovie>
 
     </GridCont>

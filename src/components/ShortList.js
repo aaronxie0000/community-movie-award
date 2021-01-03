@@ -10,15 +10,17 @@ const List = styled.ul`
   margin: 1rem 0 0 5rem;
 
   & li{
-    line-height: 2.2rem;
+    margin-bottom: 1rem;
     font-size: 1.2rem;
     font-weight: 400;
   }
 
 `;
 
-function ShortList() {
+function ShortList({myNoms, setMyNoms}) {
     const [user, loading, error] = useAuthState(firebase.auth());
+
+    //useEffect with [user]
   
     if (loading) {
       return <p>Loading user...</p>;
@@ -40,8 +42,9 @@ function ShortList() {
     return (
         <>
             <List>
-                <li>hi</li>
-                <li>Hi1</li>
+                {myNoms.map((movie, index)=>{
+                  return(<li key={index}>{movie}</li>)
+                })}
             </List>
         </>
     )
