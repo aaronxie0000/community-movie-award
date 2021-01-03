@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { AiOutlineGoogle, AiOutlineGithub, AiFillFacebook } from "react-icons/ai";
 import { IoMdExit } from 'react-icons/io'
 
-import { Button } from "./common/Button.js";
+import { Button } from "./common/LogInButton.js";
 
 import {
   googleProvider,

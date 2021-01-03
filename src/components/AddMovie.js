@@ -1,10 +1,9 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
-import Input  from "./common/Input.js";
+import Input from "./common/Input.js";
 import ShortList from "./ShortList.js";
 import DisplayMovie from "./DisplayMovie.js";
-
 
 const GridCont = styled.div`
   display: grid;
@@ -20,7 +19,8 @@ const GridCont = styled.div`
     "Search MyMovie"
     "DisplayMovie MyMovie";
 
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1.5fr 1fr;
+  column-gap: 3rem;
   grid-template-rows: 1fr 3fr;
 `;
 
@@ -32,14 +32,9 @@ const MyMovie = styled.div`
   grid-area: MyMovie;
 `;
 
-
-
 const Title = styled.h1`
-  text-align: center;
-  text-decoration: underline;
+  color: ${(props) => props.theme.mainColor};
 `;
-
-
 
 const DisplayMovieCont = styled.div`
   grid-area: DisplayMovie;
@@ -47,26 +42,26 @@ const DisplayMovieCont = styled.div`
 `;
 
 function AddMovie() {
-  const [movieTitle, setTitle] = useState('');
+  const [movieTitle, setTitle] = useState("");
   const [myNoms, setMyNoms] = useState([]);
-
 
   return (
     <GridCont>
       <SearchMovie>
-        <h1>Search a movie!</h1>
+        <Title>Search a Movie!</Title>
         <Input movieTitle={movieTitle} setTitle={setTitle}></Input>
       </SearchMovie>
 
       <DisplayMovieCont>
-        <DisplayMovie movieTitle={movieTitle} setMyNoms={setMyNoms}/>
+        <DisplayMovie movieTitle={movieTitle} setMyNoms={setMyNoms} />
       </DisplayMovieCont>
 
       <MyMovie>
-        <Title>Your Nominations</Title>
+        <Title style={{ textAlign: "center", textDecoration: "underline" }}>
+          Your Nominations
+        </Title>
         <ShortList myNoms={myNoms} setMyNoms={setMyNoms} />
       </MyMovie>
-
     </GridCont>
   );
 }

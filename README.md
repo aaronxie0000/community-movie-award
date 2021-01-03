@@ -1,8 +1,8 @@
 
 ### To Do: 
 
-- [ ] Search for movies on OMDb (only movies) (make sure to useState, so auto refresh search useEffect)
-- [ ] Display movie's name, year of release (at least)
+- [√] Search for movies on OMDb (only movies) (make sure to useState, so auto refresh search useEffect)
+- [√] Display movie's name, year of release (at least)
 - [ ] Add Movie to global nomination list (not user specific)
 - [ ] View the list of films already nominated by all users
 - [ ] Remove a film from nomination list 
