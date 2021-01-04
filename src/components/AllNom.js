@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 
 import { db } from "./../firebase.js";
@@ -82,21 +82,18 @@ function AllNom() {
       }
     });
 
-    if (!user){
-        localVotes.current.push(movieID)
+    if (!user) {
+      localVotes.current.push(movieID);
     }
-
   }
 
   function isNomUser(voters, movieID) {
     if (user && voters.includes(user.uid)) {
       return true;
-    }
-    else if(!user && localVotes.current.includes(movieID)){
-        return true;
-    }
-    else{
-        return false;
+    } else if (!user && localVotes.current.includes(movieID)) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -104,49 +101,56 @@ function AllNom() {
     <AllNomCont>
       <Title>Community's Nominations</Title>
       <Table>
-        <tr>
-          <th colSpan="2">Movie</th>
-          <th>Year</th>
-          <th>Votes</th>
-        </tr>
-        {communityNom &&
-          communityNom.docs.map((nom) => {
-            return (
-              <Entry>
-                <td
-                  colSpan="2"
-                  style={{ textAlign: "left", marginLeft: "10%", paddingLeft: "20px", borderLeft: "2px solid black"}}
-                >
-                  {nom.data().movies.Title}
-                </td>
-                <td>{nom.data().movies.Year}</td>
-                <td style={{ fontWeight: "bold" }}>
-                  {nom.data().votes}
-                  {isNomUser(nom.data().voters, nom.data().imdbID) ? (
-                    <button
-                      disabled
-                      style={{
-                        border: "1px solid lightgrey",
-                        background: "none",
-                        padding: "3px 7px",
-                        borderRadius: "3px",
-                      }}
-                    >
-                      +1
-                    </button>
-                  ) : (
-                    <SmallButton
-                      mColor={(props) => props.theme.tchColor}
-                      hColor={(props) => props.theme.tchColor}
-                      onClick={() => handleVote(nom.data().imdbID)}
-                    >
-                      +1
-                    </SmallButton>
-                  )}
-                </td>
-              </Entry>
-            );
-          })}
+        <tbody>
+          <tr>
+            <th colSpan="2">Movie</th>
+            <th>Year</th>
+            <th>Votes</th>
+          </tr>
+          {communityNom &&
+            communityNom.docs.map((nom,index) => {
+              return (
+                <Entry key={index}>
+                  <td
+                    colSpan="2"
+                    style={{
+                      textAlign: "left",
+                      marginLeft: "10%",
+                      paddingLeft: "20px",
+                      borderLeft: "2px solid black",
+                    }}
+                  >
+                    {nom.data().movies.Title}
+                  </td>
+                  <td>{nom.data().movies.Year}</td>
+                  <td style={{ fontWeight: "bold" }}>
+                    {nom.data().votes}
+                    {isNomUser(nom.data().voters, nom.data().imdbID) ? (
+                      <button
+                        disabled
+                        style={{
+                          border: "1px solid lightgrey",
+                          background: "none",
+                          padding: "3px 7px",
+                          borderRadius: "3px",
+                        }}
+                      >
+                        +1
+                      </button>
+                    ) : (
+                      <SmallButton
+                        mColor={(props) => props.theme.tchColor}
+                        hColor={(props) => props.theme.tchColor}
+                        onClick={() => handleVote(nom.data().imdbID)}
+                      >
+                        +1
+                      </SmallButton>
+                    )}
+                  </td>
+                </Entry>
+              );
+            })}
+        </tbody>
       </Table>
     </AllNomCont>
   );

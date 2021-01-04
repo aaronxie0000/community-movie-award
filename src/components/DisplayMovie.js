@@ -53,7 +53,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
       console.log("Fetched");
       
       const res = await axios.get(
-        `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}`
+        `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}&type=movie`
       );
 
       if (res.data.Response === "True") {
@@ -75,7 +75,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
     async function callGetData() {
       justCalled.current = true;
 
-      await delay(1000);
+      await delay(500);
       setTimeout(() => {
         getData().then(() => {
           if (movieTitle === "") {
@@ -84,7 +84,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
           updateShowResult(validRes.current);
         });
         justCalled.current = false;
-      }, 500); //delay call so can capture last words
+      }, 1000); //delay call so can capture last words
     }
 
     //runner
