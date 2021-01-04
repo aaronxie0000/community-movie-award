@@ -24,6 +24,7 @@ const Title = styled.h1`
   color: ${(props) => props.theme.mainColor};
   letter-spacing: 1px;
   text-transform: uppercase;
+  font-size: 2.8rem;
 `;
 
 const ButtonContent = styled.p`
@@ -111,7 +112,7 @@ function Landing() {
     <>
       <Title>Welcome to the 1st Annual Shoppies</Title>
       <IntroText>
-        Sign In to save your progress, or continue and complete your nominations
+        Nominate your favorite movies, and vote for the community's nominations. <br /> Sign In to save your progress
       </IntroText>
       {user ? <LogOut></LogOut> : <LogIn></LogIn>}
     </>

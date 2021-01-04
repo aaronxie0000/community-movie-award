@@ -11,6 +11,7 @@ const SmallButton = styled.button`
   &:hover {
     background-color: ${(props) => props.hColor};
     border-color: ${(props) => props.hColor};
+
     color: #fff;
   }
 

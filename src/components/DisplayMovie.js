@@ -50,6 +50,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
 
     async function getData() {
       validRes.current = false;
+      console.log("Fetched");
       
       const res = await axios.get(
         `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}`
@@ -115,7 +116,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
 
         setMyNoms((prev) => [...prev, resMovie[i]]);
         setTitle("");
-        // updateShowResult(false);
+        updateShowResult(false); 
 
         break;
       }
