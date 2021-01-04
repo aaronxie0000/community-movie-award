@@ -58,17 +58,9 @@ const ButtonContainer = styled.div`
 
 function LogIn() {
   function signIn(provider) {
-    console.log("Sign In");
     firebase
       .auth()
       .signInWithPopup(provider)
-      .then((res) => {
-        const userInfo = res.user;
-        console.log(userInfo);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
   }
 
   return (
@@ -100,12 +92,6 @@ function LogOut() {
     firebase
       .auth()
       .signOut()
-      .then(() => {
-        console.log("Signed Out");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
   }
   return (
     <>

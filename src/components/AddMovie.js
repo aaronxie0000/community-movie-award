@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 import Input from "./common/Input.js";
@@ -41,26 +41,71 @@ const DisplayMovieCont = styled.div`
   overflow: scroll;
 `;
 
+const BannerCont = styled.div`
+  border: 2px solid ${(props) => props.theme.tchColor};
+  box-shadow: 2px 1.5px 5px rgba(0, 0, 0, 0.15);
+  height: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: 0.5rem;
+
+`;
+
+function Banner() {
+  return (
+    <BannerCont>
+      <h4>
+        Five Nominations Reached. Scroll to view community's nominations
+      </h4>
+    </BannerCont>
+  );
+}
+
 function AddMovie() {
   const [movieTitle, setTitle] = useState("");
   const [myNoms, setMyNoms] = useState([]);
+  const [fiveNom, setFiveNom] = useState(false);
+
+  useEffect(() => {
+    if (myNoms.length >= 5) {
+      setTitle("");
+      alert(
+        "You have reached five nominations, remove a movie to add a different nomination."
+        );
+      setFiveNom(true);
+    }
+    else{
+      setFiveNom(false);
+    }
+  }, [myNoms]);
 
   return (
     <GridCont>
       <SearchMovie>
         <Title>Search a Movie!</Title>
-        <Input movieTitle={movieTitle} setTitle={setTitle}></Input>
+        {fiveNom ? (
+          <Banner></Banner>
+        ) : (
+          <Input movieTitle={movieTitle} setTitle={setTitle}></Input>
+        )}
       </SearchMovie>
 
       <DisplayMovieCont>
-        <DisplayMovie movieTitle={movieTitle} setTitle={setTitle} setMyNoms={setMyNoms} />
+        <DisplayMovie
+          movieTitle={movieTitle}
+          setTitle={setTitle}
+          setMyNoms={setMyNoms}
+          fiveNom={fiveNom}
+        />
       </DisplayMovieCont>
 
       <MyMovie>
         <Title style={{ textAlign: "center", textDecoration: "underline" }}>
           Your Nominations
         </Title>
-        <ShortList myNoms={myNoms} setMyNoms={setMyNoms} />
+        <ShortList myNoms={myNoms} setMyNoms={setMyNoms} setTitle={setTitle}/>
       </MyMovie>
     </GridCont>
   );

@@ -20,56 +20,68 @@ const Item = styled.li`
   font-weight: 400;
 `;
 
-function ShortList({ myNoms, setMyNoms }) {
+function ShortList({ myNoms, setMyNoms, setTitle }) {
   const [user] = useAuthState(firebase.auth());
 
-  //gets existing user's data and put it into their nominations list; when log out remove the list
+  //gets existing user's data and put it into their nominations list; when log out remove the list; if new user (querySnapshot.forEach no loop) create that user
   useEffect(() => {
+    let fetchedData = false;
+
     async function getUsersList() {
       const docRef = db.collection("userData").where("uid", "==", user.uid);
       const querySnapshot = await docRef.get();
       querySnapshot.forEach((doc) => {
-        console.log(doc.data());
+
+        fetchedData = true;
         setMyNoms(doc.data().movies);
       });
     }
 
+    function tryAddUser() {
+      if (fetchedData) return;
+      else {
+        for (let i=0; i<myNoms.length; i++){
+          myNoms[i].uid = user.uid;
+        }
+
+        db.collection("userData").add({
+          uid: user.uid,
+          movies: myNoms,
+        });
+
+        fetchedData = false;
+      }
+    }
+
+
+    //runner
     if (user) {
-      getUsersList();
+      getUsersList().then(tryAddUser);
     } else {
       //for when log out
       setMyNoms([]);
+      setTitle("");
     }
+
+
   }, [user]);
 
-  //whenever new items add into the nomination list, add to the current user's, or if there is an user logged in but no records, create that new user with their current movie nomination
+  //whenever new items add into the nomination list, add to the current user's list if logged in
   useEffect(() => {
-    console.log(myNoms);
-
-    const userID = user ? user.uid : "NONE";
+    if (!user) {
+      return;
+    }
 
     //updating with query need to use work around with get()
     const docRef = db
       .collection("userData")
-      .where("uid", "==", userID)
+      .where("uid", "==", user.uid)
       .limit(1);
 
     docRef.get().then((query) => {
       const match = query.docs[0];
-      console.log(match);
-      console.log(userID);
-
       if (match) {
         match.ref.update({
-          movies: myNoms,
-        });
-      }
-
-      //create new user
-      if (!match && userID !== "NONE") {
-        console.log("added user");
-        db.collection("userData").add({
-          uid: user.uid,
           movies: myNoms,
         });
       }
@@ -86,7 +98,7 @@ function ShortList({ myNoms, setMyNoms }) {
       prev.filter((nom) => {
         if (nom.Title === targetMovie) {
           targetMovieID = nom.imdbID;
-          console.log(targetMovieID);
+          removeFromAllNom(); // to remove from all Nom after found the movie; if call outside of this, may remove before the target ID is set
           return false; //false is fail test, and is removed
         } else {
           return true;
@@ -104,7 +116,6 @@ function ShortList({ myNoms, setMyNoms }) {
       });
     }
 
-    removeFromAllNom();
   }
 
   return (

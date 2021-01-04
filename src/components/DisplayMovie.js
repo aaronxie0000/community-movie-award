@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -24,18 +24,35 @@ const Item = styled.li`
   justify-content: space-between;
 `;
 
-function DisplayMovie({ movieTitle, setMyNoms, setTitle }) {
+function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
   const [showResult, updateShowResult] = useState(false);
   const [resMovie, setMovie] = useState([]);
   const [user] = useAuthState(firebase.auth());
 
+  const justCalled = useRef(false);
+  const validRes = useRef(false);
+
+  function delay(delay) {
+    return new Promise((res) => setTimeout(res, delay));
+  }
+
+  //to hide results if have reached fiveNom
+  useEffect(() => {
+    if (fiveNom) {
+      updateShowResult(false);
+    }
+  }, [fiveNom]);
+
   //gets data from axios, and checks if has already been nominated and add that as a obj key
   useEffect(() => {
-    updateShowResult(false);
+    justCalled.current = true;
 
-    let goodRes = false;
+    validRes.current = false;
+    updateShowResult(validRes.current);
 
     async function getData() {
+      console.log("Fetched " + movieTitle);
+
       const res = await axios.get(
         `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${movieTitle}`
       );
@@ -45,17 +62,35 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle }) {
           const dataRef = db.collection("allNoms").where("imdbID", "==", mid);
           const querySnapshot = await dataRef.get();
           if (!querySnapshot.empty) {
-            res.data.Search[i].isNom = true;
+            res.data.Search[i].prevNom = true;
           } else {
-            res.data.Search[i].isNom = false;
+            res.data.Search[i].prevNom = false;
           }
         }
+        validRes.current = true;
         setMovie(res.data.Search);
-        goodRes = true;
       }
     }
 
-    getData().then(() => updateShowResult(goodRes));
+    async function callGetData() {
+      justCalled.current = true;
+
+      await delay(500);
+      setTimeout(getData, 500); //delay call so can capture last words
+
+      justCalled.current = false;
+
+      if (movieTitle === "") {
+        validRes.current = false;
+      }
+      updateShowResult(validRes.current);
+    }
+
+    if (!justCalled.current) {
+      callGetData();
+    } else {
+      return;
+    }
   }, [movieTitle]);
 
   //add nominations; only adds to allNoms as by setting state, will trigger ShortList to update the user specific document
@@ -76,6 +111,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle }) {
 
         setMyNoms((prev) => [...prev, resMovie[i]]);
         setTitle("");
+        updateShowResult(false);
 
         break;
       }
@@ -89,7 +125,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle }) {
           return (
             <Item key={index}>
               {movie.Title} ({movie.Year})
-              {movie.isNom ? null : (
+              {movie.prevNom ? null : (
                 <SmallButton
                   mColor={(props) => props.theme.tchColor}
                   hColor={(props) => props.theme.tchColor}
