@@ -44,7 +44,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
     }
   }, [fiveNom]);
 
-  //gets data from axios, and checks if has already been nominated and add that as a obj key
+  //gets data from axios, and checks if has already been nominated and add that as a obj key; with throttle for limit api calls
   useEffect(() => {
     refMovieTitle.current = movieTitle;
 
@@ -101,18 +101,21 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
 
     for (let i = 0; i < resMovie.length; i++) {
       if (targetMovie === resMovie[i].Title) {
-        resMovie[i].uid = user ? user.uid : "Guest";
+        const userID = user ? user.uid : "Guest";
 
         db.collection("allNoms")
           .add({
             imdbID: resMovie[i].imdbID,
             movies: resMovie[i],
+            votes: 1,
+            userID: userID,
+            voters: [userID]
           })
           .catch((err) => console.log(err));
 
         setMyNoms((prev) => [...prev, resMovie[i]]);
         setTitle("");
-        updateShowResult(false);
+        // updateShowResult(false);
 
         break;
       }
