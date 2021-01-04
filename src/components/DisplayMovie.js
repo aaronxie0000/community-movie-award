@@ -33,7 +33,6 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
   const validRes = useRef(false);
   const refMovieTitle = useRef(movieTitle); //cause of https://github.com/facebook/react/issues/14010
 
-
   function delay(delay) {
     return new Promise((res) => setTimeout(res, delay));
   }
@@ -49,16 +48,13 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
   useEffect(() => {
     refMovieTitle.current = movieTitle;
 
-    async function getData(tMovie) {
-      console.log("Fetched " + refMovieTitle.current);
-      console.log("Prev bug would instead fetch: " + movieTitle)
-
+    async function getData() {
       validRes.current = false;
-      updateShowResult(validRes.current);
-
+      
       const res = await axios.get(
         `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}`
       );
+
       if (res.data.Response === "True") {
         for (let i = 0; i < res.data.Search.length; i++) {
           const mid = res.data.Search[i].imdbID;
@@ -78,15 +74,16 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
     async function callGetData() {
       justCalled.current = true;
 
-      await delay(500);
-      setTimeout(getData, 1000); //delay call so can capture last words
-
-      justCalled.current = false;
-
-      if (movieTitle === "") {
-        validRes.current = false;
-      }
-      updateShowResult(validRes.current);
+      await delay(1000);
+      setTimeout(() => {
+        getData().then(() => {
+          if (movieTitle === "") {
+            validRes.current = false;
+          }
+          updateShowResult(validRes.current);
+        });
+        justCalled.current = false;
+      }, 500); //delay call so can capture last words
     }
 
     //runner
