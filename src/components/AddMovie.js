@@ -10,7 +10,7 @@ const GridCont = styled.div`
 
   border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 5px;
-  padding: 4rem 2rem;
+  padding: 4rem;
 
   margin: 4rem 0 0 0;
   width: 80vw;
