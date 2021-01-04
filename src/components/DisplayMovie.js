@@ -31,6 +31,8 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
 
   const justCalled = useRef(false);
   const validRes = useRef(false);
+  const refMovieTitle = useRef(movieTitle); //cause of https://github.com/facebook/react/issues/14010
+
 
   function delay(delay) {
     return new Promise((res) => setTimeout(res, delay));
@@ -45,16 +47,17 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
 
   //gets data from axios, and checks if has already been nominated and add that as a obj key
   useEffect(() => {
-    justCalled.current = true;
+    refMovieTitle.current = movieTitle;
 
-    validRes.current = false;
-    updateShowResult(validRes.current);
+    async function getData(tMovie) {
+      console.log("Fetched " + refMovieTitle.current);
+      console.log("Prev bug would instead fetch: " + movieTitle)
 
-    async function getData() {
-      console.log("Fetched " + movieTitle);
+      validRes.current = false;
+      updateShowResult(validRes.current);
 
       const res = await axios.get(
-        `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${movieTitle}`
+        `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}`
       );
       if (res.data.Response === "True") {
         for (let i = 0; i < res.data.Search.length; i++) {
@@ -67,8 +70,8 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
             res.data.Search[i].prevNom = false;
           }
         }
-        validRes.current = true;
         setMovie(res.data.Search);
+        validRes.current = true;
       }
     }
 
@@ -76,7 +79,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
       justCalled.current = true;
 
       await delay(500);
-      setTimeout(getData, 500); //delay call so can capture last words
+      setTimeout(getData, 1000); //delay call so can capture last words
 
       justCalled.current = false;
 
@@ -86,6 +89,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
       updateShowResult(validRes.current);
     }
 
+    //runner
     if (!justCalled.current) {
       callGetData();
     } else {
