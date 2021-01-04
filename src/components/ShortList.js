@@ -39,18 +39,25 @@ function ShortList({ myNoms, setMyNoms, setTitle }) {
 
     function tryAddUser() {
       if (fetchedData) return;
-      else {
-        for (let i=0; i<myNoms.length; i++){
-          myNoms[i].uid = user.uid;
-        }
+      // else {
+      //   for (let i=0; i<myNoms.length; i++){
+      //     myNoms[i].uid = user.uid;
+      //   }
 
-        db.collection("userData").add({
-          uid: user.uid,
-          movies: myNoms,
-        });
+      //   db.collection("userData").add({
+      //     uid: user.uid,
+      //     movies: myNoms,
+      //   });
 
-        fetchedData = false;
+      //   fetchedData = false;
+      // }
+
+      
+      //do not include old data in the profile's nominations; start fresh
+      else{
+        setMyNoms([]);
       }
+
     }
 
 

@@ -62,6 +62,7 @@ function LogIn() {
     firebase
       .auth()
       .signInWithPopup(provider)
+      .catch((err)=>{alert(err.message)})
   }
 
   return (
