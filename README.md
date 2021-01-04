@@ -22,3 +22,6 @@ Extra feature:
 - Firebase Auth
 
 
+### Current Bugs
+- The Checking of if is in Nom;
+

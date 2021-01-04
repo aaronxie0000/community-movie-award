@@ -53,7 +53,7 @@ function AddMovie() {
       </SearchMovie>
 
       <DisplayMovieCont>
-        <DisplayMovie movieTitle={movieTitle} setMyNoms={setMyNoms} />
+        <DisplayMovie movieTitle={movieTitle} setTitle={setTitle} setMyNoms={setMyNoms} />
       </DisplayMovieCont>
 
       <MyMovie>

@@ -3,9 +3,9 @@ import styled from "styled-components";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import firebase from "../firebase.js";
-import { db } from '../firebase.js'
+import { db } from "../firebase.js";
 
-import { SmallButton } from './common/SmallButton.js'
+import { SmallButton } from "./common/SmallButton.js";
 
 const List = styled.ul`
   list-style: none;
@@ -20,74 +20,91 @@ const Item = styled.li`
   font-weight: 400;
 `;
 
-
-
 function ShortList({ myNoms, setMyNoms }) {
   const [user] = useAuthState(firebase.auth());
 
-
-  //The two useEffect is only for userData; does not effect allNoms document (firestore)
-
+  //gets existing user's data and put it into their nominations list; when log out remove the list
   useEffect(() => {
-    //don't need the auto refreshing one; get data once
-    const docRef = db.collection("userData").where("uid", "==", user.uid)
-
-    docRef.get().then(function (doc) {
-      if (doc.exists) {
+    async function getUsersList() {
+      const docRef = db.collection("userData").where("uid", "==", user.uid);
+      const querySnapshot = await docRef.get();
+      querySnapshot.forEach((doc) => {
         console.log(doc.data());
-        setMyNoms(doc.data().movies)
+        setMyNoms(doc.data().movies);
+      });
+    }
 
-      } else {
-        //user's first log in
-      }
-    })
-  }, [user])
+    if (user) {
+      getUsersList();
+    } else {
+      //for when log out
+      setMyNoms([]);
+    }
+  }, [user]);
 
-
+  //whenever new items add into the nomination list, add to the current user's, or if there is an user logged in but no records, create that new user with their current movie nomination
   useEffect(() => {
-    console.log(myNoms)
+    console.log(myNoms);
 
-    const docRef = db.collection("userData").where("uid", "==", user.uid)
+    const userID = user ? user.uid : "NONE";
 
-    docRef.update({
-      movies: myNoms
-    })
-      .catch(() => {
-        //if need to create new user or is just guest
-        
-        if (!user.uid) {
-          console.log("Created User");
-          
-          db.collection("userData").add({
-            uid: user.uid,
-            movie: myNoms
-          })
-        }
+    //updating with query need to use work around with get()
+    const docRef = db
+      .collection("userData")
+      .where("uid", "==", userID)
+      .limit(1);
 
-      })
+    docRef.get().then((query) => {
+      const match = query.docs[0];
+      console.log(match);
+      console.log(userID);
 
-  }, [myNoms])
+      if (match) {
+        match.ref.update({
+          movies: myNoms,
+        });
+      }
 
+      //create new user
+      if (!match && userID !== "NONE") {
+        console.log("added user");
+        db.collection("userData").add({
+          uid: user.uid,
+          movies: myNoms,
+        });
+      }
+    });
+  }, [myNoms]);
+
+  //remove movie, take it away from the nominations list (which as a result, will take away from user's list in database), and from the all nominations list
   function removeMovie(e) {
     const temp = e.target.parentNode.textContent;
     const targetMovie = temp.split(" (")[0];
     let targetMovieID = "";
 
-    setMyNoms(prev => prev.filter((nom) => {
-      if (nom.Title===targetMovie){
-        targetMovieID = nom.imdbID;
-        console.log(targetMovieID);
-        return false; //false is fail test, and is removed
-      }
-      else{
-        return true;
-      }
+    setMyNoms((prev) =>
+      prev.filter((nom) => {
+        if (nom.Title === targetMovie) {
+          targetMovieID = nom.imdbID;
+          console.log(targetMovieID);
+          return false; //false is fail test, and is removed
+        } else {
+          return true;
+        }
+      })
+    );
 
-    }));
+    async function removeFromAllNom() {
+      const docRef = db
+        .collection("allNoms")
+        .where("imdbID", "==", targetMovieID);
+      const querySnapshot = await docRef.get();
+      querySnapshot.forEach((doc) => {
+        doc.ref.delete();
+      });
+    }
 
-    db.collection("allNoms").where("imdbID","==",targetMovieID).delete()
-      .catch((err)=>{console.log(err)});
-
+    removeFromAllNom();
   }
 
   return (
@@ -97,7 +114,13 @@ function ShortList({ myNoms, setMyNoms }) {
           return (
             <Item key={index}>
               {movie.Title} ({movie.Year})
-              <SmallButton color={(props) => props.theme.tchColor} hColor={'#DE3618'} onClick={removeMovie}>Remove</SmallButton>{" "}
+              <SmallButton
+                mColor={(props) => props.theme.tchColor}
+                hColor={"#DE3618"}
+                onClick={removeMovie}
+              >
+                Remove
+              </SmallButton>{" "}
             </Item>
           );
         })}
