@@ -49,6 +49,10 @@ function DisplayMovie({ movieTitle, setMyNoms }) {
 
         for (let i =0; i<resMovie.length; i++){
             if (targetMovie === resMovie[i].Title){
+                
+                console.log(resMovie[i]);
+
+
                 setMyNoms(prev=>[...prev, resMovie[i]]);
                 break;
             }

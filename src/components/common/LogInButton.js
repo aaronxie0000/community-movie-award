@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Button = styled.button`
+const LogInButton = styled.button`
     background-color: transparent;
     border-radius: 3px;
     padding:0.5rem 0.75rem;
@@ -33,5 +33,5 @@ const Button = styled.button`
 
 `;
 
-export {Button};
+export {LogInButton};
 

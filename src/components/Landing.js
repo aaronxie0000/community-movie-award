@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { AiOutlineGoogle, AiOutlineGithub, AiFillFacebook } from "react-icons/ai";
 import { IoMdExit } from 'react-icons/io'
 
-import { Button } from "./common/LogInButton.js";
+import { LogInButton } from "./common/LogInButton.js";
 
 import {
   googleProvider,
@@ -24,7 +24,6 @@ const Title = styled.h1`
   color: ${(props) => props.theme.mainColor};
   letter-spacing: 1px;
   text-transform: uppercase;
-  margin-right: 2rem;
 `;
 
 const ButtonContent = styled.p`
@@ -74,24 +73,24 @@ function LogIn() {
 
   return (
     <ButtonContainer>
-      {/* using arrow function to make a funciton isntead of just passing; is so can use param */}
-      <Button onClick={() => signIn(googleProvider)}>
+      {/* using arrow function to make a function instead of just passing; is so can use param */}
+      <LogInButton onClick={() => signIn(googleProvider)}>
         <ButtonContent>
           Sign In <br /> With Google <AiOutlineGoogle />
         </ButtonContent>
-      </Button>
+      </LogInButton>
 
-      <Button onClick={() => signIn(githubProvider)}>
+      <LogInButton onClick={() => signIn(githubProvider)}>
         <ButtonContent>
           Sign In <br /> With Github <AiOutlineGithub />
         </ButtonContent>
-      </Button>
+      </LogInButton>
 
-      <Button onClick={() => signIn(facebookProvider)}>
+      <LogInButton onClick={() => signIn(facebookProvider)}>
         <ButtonContent>
           Sign In <br /> With Facebook <AiFillFacebook />
         </ButtonContent>
-      </Button>
+      </LogInButton>
     </ButtonContainer>
   );
 }
@@ -110,11 +109,11 @@ function LogOut() {
   }
   return (
     <>
-      <Button onClick={signOut}>
+      <LogInButton onClick={signOut}>
         <ButtonContent>
           Sign Out <IoMdExit />
         </ButtonContent>
-      </Button>
+      </LogInButton>
     </>
   );
 }
