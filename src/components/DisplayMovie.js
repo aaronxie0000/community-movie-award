@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { db } from '../firebase.js'
 
-import {SmallButton} from './common/SmallButton.js'
+import { SmallButton } from './common/SmallButton.js'
 
 const List = styled.ul`
   margin: 1rem 1rem;
@@ -43,17 +44,23 @@ function DisplayMovie({ movieTitle, setMyNoms }) {
             });
     }, [movieTitle]);
 
-    function addMovie(e){
+    function addMovie(e) {
         const temp = e.target.parentNode.textContent;
         const targetMovie = temp.split(" (")[0];
 
-        for (let i =0; i<resMovie.length; i++){
-            if (targetMovie === resMovie[i].Title){
-                
+        for (let i = 0; i < resMovie.length; i++) {
+            if (targetMovie === resMovie[i].Title) {
+
+                db.collection("allNoms").add({
+                    imdbID: resMovie[i].imdbID,
+                    movie: resMovie[i]
+                })
+                .then(()=>console.log("added data!"))
+                .catch((err)=>console.log(err))
                 console.log(resMovie[i]);
 
 
-                setMyNoms(prev=>[...prev, resMovie[i]]);
+                setMyNoms(prev => [...prev, resMovie[i]]);
                 break;
             }
         }
