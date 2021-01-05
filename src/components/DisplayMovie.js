@@ -51,10 +51,9 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
 
     async function getData() {
       validRes.current = false;
-      console.log("Fetched");
 
       const res = await axios.get(
-        `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}&type=movie`
+        `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}&type=movie`
       );
       console.log(res.data);
       if (res.data.Response === "True") {
