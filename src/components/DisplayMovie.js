@@ -135,7 +135,19 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
           return (
             <Item key={index}>
               {movie.Title} ({movie.Year})
-              {movie.prevNom ? null : (
+              {movie.prevNom ? (
+                <button
+                  disabled
+                  style={{
+                    border: "1px solid lightgrey",
+                    background: "none",
+                    padding: "3px 7px",
+                    borderRadius: "3px",
+                  }}
+                >
+                  Nominate
+                </button>
+              ) : (
                 <SmallButton
                   mColor={(props) => props.theme.tchColor}
                   hColor={(props) => props.theme.tchColor}

@@ -71,10 +71,12 @@ function AddMovie() {
   useEffect(() => {
     if (myNoms.length >= 5) {
       setTitle("");
+      
       alert(
         "You have reached five nominations, remove a movie to add a different nomination."
         );
-      setFiveNom(true);
+      
+        setFiveNom(true);
     }
     else{
       setFiveNom(false);
