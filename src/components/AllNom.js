@@ -10,7 +10,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { SmallButton } from "./common/SmallButton.js";
 
 const AllNomCont = styled.div`
-  border: 2px solid ${(props) => props.theme.mainColor};
+  border: 3px solid ${(props) => props.theme.mainColor};
   border-radius: 5px;
   padding: 2rem 4rem;
 
@@ -45,7 +45,7 @@ const Table = styled.table`
 
 const Entry = styled.tr`
   & td {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
 
     padding: 0.5rem 0.2rem;
     text-align: center;

@@ -9,7 +9,7 @@ import Modal from "./Modal.js";
 const GridCont = styled.div`
   display: grid;
 
-  border: 2px solid ${(props) => props.theme.mainColor};
+  border: 3px solid ${(props) => props.theme.mainColor};
   border-radius: 5px;
   padding: 4rem;
 
