@@ -12,7 +12,7 @@ import { SmallButton } from "./common/SmallButton.js";
 const AllNomCont = styled.div`
   border: 2px solid ${(props) => props.theme.mainColor};
   border-radius: 5px;
-  padding: 2rem 2rem;
+  padding: 2rem 4rem;
 
   margin: 4rem 0 0 0;
   width: 80vw;

@@ -31,7 +31,6 @@ function ShortList({ myNoms, setMyNoms, setTitle }) {
       const docRef = db.collection("userData").where("uid", "==", user.uid);
       const querySnapshot = await docRef.get();
       querySnapshot.forEach((doc) => {
-
         fetchedData = true;
         setMyNoms(doc.data().movies);
       });
@@ -39,27 +38,21 @@ function ShortList({ myNoms, setMyNoms, setTitle }) {
 
     function tryAddUser() {
       if (fetchedData) return;
-      // else {
-      //   for (let i=0; i<myNoms.length; i++){
-      //     myNoms[i].uid = user.uid;
-      //   }
-
-      //   db.collection("userData").add({
-      //     uid: user.uid,
-      //     movies: myNoms,
-      //   });
-
-      //   fetchedData = false;
-      // }
-
-      
-      //do not include old data in the profile's nominations; start fresh
-      else{
+      else {
+        // for (let i=0; i<myNoms.length; i++){
+        //   myNoms[i].uid = user.uid;
+        // }
+        //start fresh when user log in
         setMyNoms([]);
+
+        db.collection("userData").add({
+          uid: user.uid,
+          movies: myNoms,
+        });
+
+        fetchedData = false;
       }
-
     }
-
 
     //runner
     if (user) {
@@ -69,8 +62,6 @@ function ShortList({ myNoms, setMyNoms, setTitle }) {
       setMyNoms([]);
       setTitle("");
     }
-
-
   }, [user]);
 
   //whenever new items add into the nomination list, add to the current user's list if logged in
@@ -122,7 +113,6 @@ function ShortList({ myNoms, setMyNoms, setTitle }) {
         doc.ref.delete();
       });
     }
-
   }
 
   return (

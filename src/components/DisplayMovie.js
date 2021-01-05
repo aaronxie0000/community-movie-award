@@ -50,12 +50,9 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
     refMovieTitle.current = movieTitle;
 
     async function getData() {
-      validRes.current = false;
-
       const res = await axios.get(
         `https://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}&type=movie`
       );
-      console.log(res.data);
       if (res.data.Response === "True") {
         for (let i = 0; i < res.data.Search.length; i++) {
           const mid = res.data.Search[i].imdbID;
@@ -71,12 +68,13 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
         validRes.current = true;
         updateShowResult(validRes.current);
       } else {
+        setMovie([]);
+
         const defMessage = res.data.Error || "Results Pending...";
         updateMsg(
           refMovieTitle.current === "" ? "Enter a movie name..." : defMessage
         );
         validRes.current = false;
-        setMovie([]);
         updateShowResult(validRes.current);
       }
     }
@@ -84,12 +82,16 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
     async function callGetData() {
       justCalled.current = true;
 
-      await delay(500);
+      validRes.current = false;
+      updateShowResult(validRes.current);
+      updateMsg("Give me a sec...");
+
+      await delay(300);
       setTimeout(() => {
         getData().then(() => {
           justCalled.current = false;
         });
-      }, 500); //delay call so can capture last words
+      }, 2000); //delay call so can capture last words
     }
 
     //runner
@@ -109,15 +111,13 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
       if (targetMovie === resMovie[i].Title) {
         const userID = user ? user.uid : "Guest";
 
-        db.collection("allNoms")
-          .add({
-            imdbID: resMovie[i].imdbID,
-            movies: resMovie[i],
-            votes: 1,
-            userID: userID,
-            voters: [userID],
-          })
-          .catch((err) => console.log(err));
+        db.collection("allNoms").add({
+          imdbID: resMovie[i].imdbID,
+          movies: resMovie[i],
+          votes: 1,
+          userID: userID,
+          voters: [userID],
+        });
 
         setMyNoms((prev) => [...prev, resMovie[i]]);
         setTitle("");
