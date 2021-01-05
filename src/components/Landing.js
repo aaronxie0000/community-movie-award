@@ -25,6 +25,15 @@ const Title = styled.h1`
   letter-spacing: 1px;
   text-transform: uppercase;
   font-size: 2.8rem;
+  letter-spacing: 0.5rem;
+  word-spacing: 1rem;
+  & sup{
+    font-size: 1.8rem;
+    margin-top: -1rem;
+    margin-right: 1.5rem;
+    text-transform: none;
+    letter-spacing: 0.2rem;
+  }
 `;
 
 const ButtonContent = styled.p`
@@ -111,9 +120,9 @@ function Landing() {
 
   return (
     <>
-      <Title>Welcome to the 1st Annual Shoppies</Title>
+      <Title>Welcome to the 1<sup>st</sup> Annual Shoppies</Title>
       <IntroText>
-        Nominate your favorite movies, and vote for the community's nominations. <br /> Sign In to save your progress
+        Nominate your favorite movies, and vote on the community's nominations. <br /> Sign In to save your progress
       </IntroText>
       {user ? <LogOut></LogOut> : <LogIn></LogIn>}
     </>

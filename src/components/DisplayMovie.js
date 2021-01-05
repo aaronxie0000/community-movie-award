@@ -31,7 +31,8 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
 
   const justCalled = useRef(false);
   const validRes = useRef(false);
-  const refMovieTitle = useRef(movieTitle); //cause of https://github.com/facebook/react/issues/14010
+  const refMovieTitle = useRef(movieTitle); //because of https://github.com/facebook/react/issues/14010
+  const [errorMessage, updateMsg] = useState("Enter a movie name...");
 
   function delay(delay) {
     return new Promise((res) => setTimeout(res, delay));
@@ -51,11 +52,11 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
     async function getData() {
       validRes.current = false;
       console.log("Fetched");
-      
+
       const res = await axios.get(
         `http://www.omdbapi.com/?apikey=${process.env.REACT_APP_OMDB_KEY}&s=${refMovieTitle.current}&type=movie`
       );
-
+      console.log(res.data);
       if (res.data.Response === "True") {
         for (let i = 0; i < res.data.Search.length; i++) {
           const mid = res.data.Search[i].imdbID;
@@ -69,6 +70,15 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
         }
         setMovie(res.data.Search);
         validRes.current = true;
+        updateShowResult(validRes.current);
+      } else {
+        const defMessage = res.data.Error || "Results Pending...";
+        updateMsg(
+          refMovieTitle.current === "" ? "Enter a movie name..." : defMessage
+        );
+        validRes.current = false;
+        setMovie([]);
+        updateShowResult(validRes.current);
       }
     }
 
@@ -78,13 +88,9 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
       await delay(500);
       setTimeout(() => {
         getData().then(() => {
-          if (movieTitle === "") {
-            validRes.current = false;
-          }
-          updateShowResult(validRes.current);
+          justCalled.current = false;
         });
-        justCalled.current = false;
-      }, 1000); //delay call so can capture last words
+      }, 500); //delay call so can capture last words
     }
 
     //runner
@@ -110,13 +116,13 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
             movies: resMovie[i],
             votes: 1,
             userID: userID,
-            voters: [userID]
+            voters: [userID],
           })
           .catch((err) => console.log(err));
 
         setMyNoms((prev) => [...prev, resMovie[i]]);
         setTitle("");
-        updateShowResult(false); 
+        updateShowResult(false);
 
         break;
       }
@@ -143,7 +149,7 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
           );
         })
       ) : (
-        <li>Results Pending...</li>
+        <li style={{ color: "#F49342", fontWeight: "bold" }}>{errorMessage}</li>
       )}
     </List>
   );
