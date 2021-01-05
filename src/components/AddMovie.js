@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Input from "./common/Input.js";
 import ShortList from "./ShortList.js";
 import DisplayMovie from "./DisplayMovie.js";
+import Modal from "./Modal.js";
 
 const GridCont = styled.div`
   display: grid;
@@ -50,15 +51,12 @@ const BannerCont = styled.div`
   align-items: center;
   text-align: center;
   margin-top: 0.5rem;
-
 `;
 
 function Banner() {
   return (
     <BannerCont>
-      <h4>
-        Five Nominations Reached. Scroll to view community's nominations
-      </h4>
+      <h4>Five Nominations Reached. Scroll to view community's nominations</h4>
     </BannerCont>
   );
 }
@@ -67,24 +65,26 @@ function AddMovie() {
   const [movieTitle, setTitle] = useState("");
   const [myNoms, setMyNoms] = useState([]);
   const [fiveNom, setFiveNom] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (myNoms.length >= 5) {
       setTitle("");
-      
-      alert(
-        "You have reached five nominations, remove a movie to add a different nomination."
-        );
-      
-        setFiveNom(true);
-    }
-    else{
+
+      setIsOpen(true);
+      setTimeout(() => setIsOpen(false), 5000);
+
+      setFiveNom(true);
+    } else {
       setFiveNom(false);
+      setIsOpen(false);
     }
   }, [myNoms]);
 
   return (
     <GridCont>
+      <Modal isOpen={isOpen}></Modal>
+
       <SearchMovie>
         <Title>Search a Movie!</Title>
         {fiveNom ? (
@@ -107,7 +107,7 @@ function AddMovie() {
         <Title style={{ textAlign: "center", textDecoration: "underline" }}>
           Your Nominations
         </Title>
-        <ShortList myNoms={myNoms} setMyNoms={setMyNoms} setTitle={setTitle}/>
+        <ShortList myNoms={myNoms} setMyNoms={setMyNoms} setTitle={setTitle} />
       </MyMovie>
     </GridCont>
   );

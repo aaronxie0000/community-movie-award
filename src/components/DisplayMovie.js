@@ -34,9 +34,6 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
   const refMovieTitle = useRef(movieTitle); //because of https://github.com/facebook/react/issues/14010
   const [errorMessage, updateMsg] = useState("Enter a movie name...");
 
-  function delay(delay) {
-    return new Promise((res) => setTimeout(res, delay));
-  }
 
   //to hide results if have reached fiveNom
   useEffect(() => {
@@ -86,12 +83,11 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
       updateShowResult(validRes.current);
       updateMsg("Give me a sec...");
 
-      await delay(300);
       setTimeout(() => {
         getData().then(() => {
           justCalled.current = false;
         });
-      }, 2000); //delay call so can capture last words
+      }, 500);
     }
 
     //runner
