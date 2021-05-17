@@ -1,8 +1,12 @@
 import React from "react";
 import styled from "styled-components";
 
-import { AiOutlineGoogle, AiOutlineGithub, AiFillFacebook } from "react-icons/ai";
-import { IoMdExit } from 'react-icons/io'
+import {
+  AiOutlineGoogle,
+  AiOutlineGithub,
+  AiFillFacebook,
+} from "react-icons/ai";
+import { IoMdExit } from "react-icons/io";
 
 import { LogInButton } from "./common/LogInButton.js";
 
@@ -28,7 +32,7 @@ const Title = styled.h1`
   letter-spacing: 0.5rem;
   word-spacing: 0.8rem;
 
-  @media (max-width: 768px){
+  @media (max-width: 768px) {
     word-spacing: 1.5rem;
   }
 `;
@@ -58,8 +62,8 @@ const ButtonContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  & button{
-      margin: 0 2rem;
+  & button {
+    margin: 0 2rem;
   }
 `;
 
@@ -68,7 +72,9 @@ function LogIn() {
     firebase
       .auth()
       .signInWithPopup(provider)
-      .catch((err)=>{alert(err.message)})
+      .catch((err) => {
+        alert(err.message);
+      });
   }
 
   return (
@@ -97,9 +103,7 @@ function LogIn() {
 
 function LogOut() {
   function signOut() {
-    firebase
-      .auth()
-      .signOut()
+    firebase.auth().signOut();
   }
   return (
     <>
@@ -117,9 +121,10 @@ function Landing() {
 
   return (
     <>
-      <Title>Welcome to the 1st Annual Shoppies</Title>
+      <Title>Welcome to the Community Movie Awards</Title>
       <IntroText>
-        Nominate your favorite movies, and vote on the community's nominations. <br /> Sign In to save your progress
+        Nominate your favorite movies, and vote on the community's nominations.{" "}
+        <br /> Sign In to save your progress
       </IntroText>
       {user ? <LogOut></LogOut> : <LogIn></LogIn>}
     </>

@@ -34,7 +34,6 @@ function DisplayMovie({ movieTitle, setMyNoms, setTitle, fiveNom }) {
   const refMovieTitle = useRef(movieTitle); //because of https://github.com/facebook/react/issues/14010
   const [errorMessage, updateMsg] = useState("Enter a movie name...");
 
-
   //to hide results if have reached fiveNom
   useEffect(() => {
     if (fiveNom) {

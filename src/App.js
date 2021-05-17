@@ -1,8 +1,6 @@
 import Content from "./components/Content.js";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 
-
-
 const DefStyleChange = createGlobalStyle`
   :root {
     font-size:13px;
@@ -20,9 +18,9 @@ const DefStyleChange = createGlobalStyle`
 `;
 
 const theme = {
-  mainColor: '#084E8A',
-  tchColor: '#5C6AC4',
-}
+  mainColor: "#084E8A",
+  tchColor: "#5C6AC4",
+};
 
 function App() {
   return (

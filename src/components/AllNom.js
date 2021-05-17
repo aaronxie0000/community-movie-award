@@ -108,7 +108,7 @@ function AllNom() {
             <th>Votes</th>
           </tr>
           {communityNom &&
-            communityNom.docs.map((nom,index) => {
+            communityNom.docs.map((nom, index) => {
               return (
                 <Entry key={index}>
                   <td

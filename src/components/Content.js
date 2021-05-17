@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 
-import Landing from './Landing.js';
-import AddMovie from './AddMovie.js'
-import AllNominations from './AllNom.js'
+import Landing from "./Landing.js";
+import AddMovie from "./AddMovie.js";
+import AllNominations from "./AllNom.js";
 
 const Body = styled.div`
   display: flex;
@@ -11,10 +11,7 @@ const Body = styled.div`
   align-items: center;
   flex-direction: column;
   margin: 2rem 0;
-
 `;
-
-
 
 function Content() {
   return (
